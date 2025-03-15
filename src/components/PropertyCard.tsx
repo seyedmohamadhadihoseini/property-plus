@@ -1,4 +1,4 @@
-import { PropertyType } from "@/lib/types/properties";
+// import { PropertyType } from "@/lib/types/properties";
 import { property } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";

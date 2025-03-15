@@ -3,7 +3,7 @@ import logo from "@/assets/images/logo-white.png";
 import profile from "@/assets/images/profile.png";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 import LoginButton from "./LoginButton";
