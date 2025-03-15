@@ -5,13 +5,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { FaGoogle } from "react-icons/fa"
+
+import LoginButton from "./LoginButton";
+import { useSession } from "next-auth/react";
 export default function NavbarMenu() {
     const [isListShow, setIsListShow] = useState(false);
     const [isProfileShow, setIsProfileShow] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(true);
+    // const [session, setSession] = useState(false);
     const pathname = usePathname();
-
+    const { data: session } = useSession();
     return (<nav className="bg-blue-700 border-b border-blue-500">
         <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
             <div className="relative flex h-20 items-center justify-between">
@@ -71,33 +73,28 @@ export default function NavbarMenu() {
                                 className={`${pathname === "/properties" && "bg-black"} " text-white  hover:bg-gray-900 hover:text-white p-1 rounded-md px-3 py-2"`}
                             >Properties
                             </Link>
-                            {isLoggedIn&&
-                            <Link
-                                href="/properties/add"
-                                className={`${pathname === "/properties/add" && "bg-black"} " text-white  hover:bg-gray-900 hover:text-white p-1 rounded-md px-3 py-2"`}
-                            >Add Property</Link>}
+                            {session &&
+                                <Link
+                                    href="/properties/add"
+                                    className={`${pathname === "/properties/add" && "bg-black"} " text-white  hover:bg-gray-900 hover:text-white p-1 rounded-md px-3 py-2"`}
+                                >Add Property</Link>}
                         </div>
                     </div>
                 </div>
 
                 {/* <!-- Right Side Menu (Logged Out) --> */}
-                {!isLoggedIn&&
-                <div className="hidden md:block md:ml-6">
-                    <div className="flex items-center">
-                        <button
-                            className="flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2"
-                        >
-                            <FaGoogle className="text-white mr-2" />
-                            <span>Login or Register</span>
-                        </button>
-                    </div>
-                </div>}
+                {!session &&
+                    <div className="hidden md:block md:ml-6">
+                        <div className="flex items-center">
+                            <LoginButton forMobile={false} />
+                        </div>
+                    </div>}
 
                 {/* <!-- Right Side Menu (Logged In) --> */}
                 <div
                     className="absolute inset-y-0 right-0 flex items-center pr-2 md:static md:inset-auto md:ml-6 md:pr-0"
                 >
-                    {isLoggedIn &&
+                    {session &&
                         <Link href="/messages" className="relative group">
                             <button
                                 type="button"
@@ -128,7 +125,7 @@ export default function NavbarMenu() {
                             </span>
                         </Link>}
                     {/* <!-- Profile dropdown button --> */}
-                    {isLoggedIn &&
+                    {session &&
                         <div className="relative ml-3">
                             <div>
                                 <button
@@ -196,15 +193,12 @@ export default function NavbarMenu() {
                     href="/properties"
                     className={`${pathname === "/properties" && "bg-black"} text-white block rounded-md px-3 py-2 text-base font-medium`}
                 >Properties</Link>
-                {isLoggedIn &&
+                {session &&
                     <Link
                         href="/properties/add"
                         className={`${pathname === "/properties/add" && "bg-black"} text-white block rounded-md px-3 py-2 text-base font-medium`}
                     >Add Property</Link>}
-                {!isLoggedIn &&
-                    <button className="bg-green-500 rounded p-1">
-                        <span>Login or Register</span>
-                    </button>}
+                {!session && <LoginButton forMobile />}
             </div>
         </div>
     </nav>);

@@ -1,10 +1,11 @@
-import PropertiesData from "@mock/properties.json";
+import { prisma } from "@/services/prisma";
 import PropertyCard from "../PropertyCard";
 import Link from "next/link";
-export default function HomePropertiesCompnent() {
+export default async function HomePropertiesCompnent() {
+    const PropertiesData = await prisma.property.findMany()
     const randomPropertyDisplay = PropertiesData
         .sort(() => Math.random() - Math.random()).slice(0, 3)
-        .map(p => <PropertyCard key={p._id} property={p} />);
+        .map(p => <PropertyCard key={p.id} property={p} />);
     return <> <section className="px-4 py-6">
         <div className="container-xl lg:container m-auto">
             <h2 className="text-3xl font-bold text-blue-500 mb-6 text-center">
